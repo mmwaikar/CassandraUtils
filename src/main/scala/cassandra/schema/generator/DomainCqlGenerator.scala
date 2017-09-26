@@ -24,9 +24,10 @@ trait DomainCqlGenerator extends CqlGenerator {
 
   override implicit val keyspaceStatement: CqlStatement[Keyspace] = new CqlStatement[Keyspace] {
     override def cqlStatement(k: Keyspace): String = {
+      val separator = System.lineSeparator() + System.lineSeparator()
       val ks = s"CREATE KEYSPACE ${k.name} WITH replication = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };"
-      val tables = k.tables.map(t => tableStatement.cqlStatement(t)).mkString(System.lineSeparator())
-      ks + System.lineSeparator() + tables
+      val tables = k.tables.map(t => tableStatement.cqlStatement(t)).mkString(separator)
+      ks + separator + tables
     }
   }
 }
